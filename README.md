@@ -1,27 +1,29 @@
-[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-a02128?style=for-the-badge)](README.md)
-[![English](https://img.shields.io/badge/English-ece9e7?style=for-the-badge&labelColor=ece9e7&color=8a8785)](README.en.md)
-[![微信交流群](https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1-AI%20%E8%A7%86%E9%A2%91%E4%BA%A4%E6%B5%81%E7%BE%A4-8a8785?style=for-the-badge&labelColor=a02128)](#ai-视频交流社群)
-[![关注作者 X](https://img.shields.io/badge/%E5%85%B3%E6%B3%A8%E4%BD%9C%E8%80%85-%40eternityspring-8a8785?style=for-the-badge&labelColor=a02128&logo=x&logoColor=ece9e7)](https://x.com/eternityspring)
+[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-ece9e7?style=for-the-badge&labelColor=ece9e7&color=8a8785)](README.zh.md)
+[![English](https://img.shields.io/badge/English-a02128?style=for-the-badge)](README.md)
+[![Telegram](https://img.shields.io/badge/Telegram-%40ahao__dev-8a8785?style=for-the-badge&labelColor=a02128&logo=telegram&logoColor=ece9e7)](https://t.me/ahao_dev)
+[![Follow on X](https://img.shields.io/badge/Follow-%40eternityspring-8a8785?style=for-the-badge&labelColor=a02128&logo=x&logoColor=ece9e7)](https://x.com/eternityspring)
+
+🎬 **[AI Video Workspace](https://studio.reelbenchai.com)**
+
+[![ReelBench AI Video Workspace](assets/reelbench-first-screen-en.png)](https://studio.reelbenchai.com)
 
 # reelbench-skills
 
-视频侧的 Claude Code / Codex skill。
+Claude Code / Codex skills for working with video.
 
-| skill | 干什么 |
+| skill | what it does |
 | --- | --- |
-| [video-shots](skills/video-shots/) | **拉片**：把一条成片拆成逐镜头的分析表——时长、景别、类别、运镜、画面、节奏。切点与时长由 ffmpeg 量，模型只判断该判断的那几件事，15 道质量门逐条对账 |
-| [video-sync](skills/video-sync/) | **合成带分镜信息的视频**：画面一边、分镜信息一边，镜头切了信息跟着切、镜头表自动滚动高亮。横版上下叠、竖版左右并，布局改一份 CSS 就行 |
-| [video-scrub](skills/video-scrub/) | **清元数据**：把片子重建成只有画面和声音的干净文件，GPS、设备、账号 ID、遥测轨一概不搬。难的是 `ffprobe` 看不见的三层——SEI、AAC 的 DSE、compressorname。默认画面逐字节照搬，12 道门字节级验收 |
+| [video-shots](skills/video-shots/README.en.md) | **Shot breakdown**: turns a finished film into a shot-by-shot table — duration, shot size, category, camera move, frame description, rhythm role. Cuts and durations are measured by ffmpeg; the model only judges what it should; 15 quality gates check every call. |
+| [video-sync](skills/video-sync/README.en.md) | **Composites a video with the shot data alongside it**: footage on one side, the current shot's data on the other, switching at every cut with the list scrolling and highlighting itself. Landscape stacks, portrait sits side by side; the layout is one CSS file. |
+| [video-scrub](skills/video-scrub/README.en.md) | **Strips metadata**: rebuilds the film as a clean file carrying only picture and sound — GPS, device, account IDs and telemetry tracks all left behind. The hard part is the three layers `ffprobe` cannot see: SEI, the AAC DSE, and compressorname. Byte-for-byte picture by default, verified by 12 byte-level gates. |
 
-## AI 视频交流社群
+## AI video community
 
-我建了一个付费AI视频交流群，聊 AI 视频的工作流、工具和实操。
+I run a paid group about AI video — workflows, tools, and how this stuff actually gets done.
 
-有兴趣的加我：微信 **`hao_dev`**，添加时备注 **`github`**。
+Interested? Message me on Telegram **[@ahao_dev](https://t.me/ahao_dev)** and mention **`github`**.
 
-<img src="assets/wechat.png" alt="烁皓微信二维码" width="180">
-
-## 安装
+## Install
 
 ```bash
 git clone https://github.com/eternityspring/reelbench-skills.git
@@ -29,58 +31,62 @@ cd reelbench-skills
 ./scripts/install.sh
 ```
 
-软链到 `~/.claude/skills/` 和/或 `~/.codex/skills/`（哪个装了就装到哪），**`git pull` 之后立刻生效**。
+This symlinks the skills into `~/.claude/skills/` and/or `~/.codex/skills/` (whichever exists),
+so **`git pull` takes effect immediately**.
 
 ```bash
-./scripts/install.sh --claude      # 只装到 Claude Code
-./scripts/install.sh --codex       # 只装到 codex
-./scripts/install.sh video-shots   # 只装某一个 skill
-./scripts/install.sh --uninstall   # 取消软链
+./scripts/install.sh --claude      # Claude Code only
+./scripts/install.sh --codex       # codex only
+./scripts/install.sh video-shots   # one skill only
+./scripts/install.sh --uninstall   # remove the symlinks
 ```
 
-依赖只有 `node` >= 18 和 `ffmpeg` / `ffprobe`（macOS：`brew install node ffmpeg`）。
-**零 npm 依赖、零 API key**，用当前会话额度。
+Requirements: `node` >= 18 and `ffmpeg` / `ffprobe` (macOS: `brew install node ffmpeg`).
+**No npm dependencies, no API keys** — it runs on your current session.
 
-不想软链就直接拷：`cp -r skills/video-shots ~/.claude/skills/`——skill 自包含，拷走就能用。
+Prefer a copy over a symlink? `cp -r skills/video-shots ~/.claude/skills/` —
+each skill is self-contained.
 
-## 示例
+## Example
 
-`demo-report/` 是拿 `demo-video.mp4`（202.9 秒的 AI 短片《啥是AI》）真跑出来的**完整产物**：
-53 镜、平均镜长 3.83 秒、每分钟 15.7 切、15 道质量门全绿。
-`demo-report-en/` 是同一套流程跑一段 287.4 秒的英文片段（`--lang en`，报告全英文）：
-46 镜、平均镜长 6.25 秒、最长的一镜 46.92 秒——场景检测在那一段里一刀都没落，
-因为它真的是一条不切的长镜头。
+`demo-report/` is the **real output** of running the skill on `demo-video.mp4`
+(a 202.9-second AI-generated short film, *啥是AI*): 53 shots, 3.83 s average shot length,
+15.7 cuts per minute, all 15 gates green. `demo-report-en/` is the same pipeline run on a
+287.4-second English excerpt with `--lang en` — an entirely English report: 46 shots, 6.25 s
+average, and one 46.92 s take that scene detection never cut, because it genuinely never cuts.
 
-[![拉片报告](skills/video-shots/assets/report.png)](demo-report/shots-report.html)
+[![Shot breakdown report](skills/video-shots/assets/report.png)](demo-report/shots-report.html)
 
-报告是**单文件交互页**：内嵌播放器（播放时同步高亮镜头、点镜头跳转）、镜头节奏带、
-可搜索可筛选可排序的镜头表（列表 / 卡片两种视图、首尾关键帧并排、点图开大图）、
-统计分布、出场人物、质量检查。零外部依赖，离线双击能开。
+The report is a **single interactive page**: an embedded player (playback highlights the current
+shot, click a shot to jump), a pace strip, a shot list you can search, filter and sort (list or
+card view, first and last keyframe side by side, click a frame to enlarge), distributions, cast,
+and the quality gates. No external dependencies — double-click it offline.
 
-<img src="skills/video-shots/assets/report-mobile.png" width="360" alt="窄屏下的镜头表">
+<img src="skills/video-shots/assets/report-mobile.png" width="360" alt="the shot list on a narrow screen">
 
 ```
 demo-report/
-├── shots-report.html   ← 克隆下来双击就能开
-├── shots.json          ← 53 镜的拉片主数据
-├── shots.md            ← Markdown 镜头表
-├── track.json          ← 逐帧差分的运动曲线（机器证据）
-└── frames/             ← 每镜首尾两张关键帧，共 106 张
+├── shots-report.html   ← clone and double-click
+├── shots.json          ← the breakdown data for all 53 shots
+├── shots.md            ← Markdown shot list
+├── track.json          ← frame-difference motion curve (the machine's evidence)
+└── frames/             ← first and last keyframe of every shot, 106 files
 ```
 
-`demo-scrub/` 是 **video-scrub** 的产出——四段文字，没有视频，因为它的成品和源片
-**肉眼完全一样**，那正是设计目标。值得看的是那份对账，尤其
-[`half.txt`](demo-scrub/half.txt)：用网上教的标准做法清完，`ffprobe` 一片干净，
-而码流里 x264 写在 SEI 的编码参数串还有 4 处、AAC 的 DSE 里还有 8 处——
-**任何 `ffprobe` 命令都看不见它们**。
+`demo-scrub/` is what **video-scrub** produces — four pieces of text and no video, because its
+output looks **exactly like the source**, which is the whole point. What is worth reading is the
+reconciliation, above all [`half.txt`](demo-scrub/half.txt): the textbook recipe leaves `ffprobe`
+looking spotless while the bitstream still carries x264's encoder-settings SEI in 4 places and the
+AAC DSE in 8 — **no `ffprobe` command shows either of them**.
 
-**video-sync** 的产出在最后面——直接看视频。
+What **video-sync** produces is at the bottom of this page — as a video, not a screenshot.
 
-## 成片长这样
+## What it looks like
 
-287.4 秒的英文片段 + 46 镜分镜信息，1280×1296（原片 640×360，`--scale 2` 放大）。
-镜头切了信息跟着切，列表往上滚、高亮跟着滑：
+A 287.4-second English excerpt with its 46-shot breakdown, 1280×1296 (the source is 640×360,
+blown up with `--scale 2`). The panel switches with every cut; the list scrolls up and the
+highlight rides along:
 
 <video src="https://github.com/eternityspring/reelbench-skills/raw/main/demo-sync/demo-en-sync.mp4" controls muted playsinline width="760"></video>
 
-播放器没出来就直接下载：[`demo-sync/demo-en-sync.mp4`](demo-sync/demo-en-sync.mp4)
+If the player does not load, grab the file: [`demo-sync/demo-en-sync.mp4`](demo-sync/demo-en-sync.mp4)

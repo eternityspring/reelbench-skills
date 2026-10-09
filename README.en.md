@@ -1,6 +1,11 @@
-[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-ece9e7?style=for-the-badge&labelColor=ece9e7&color=8a8785)](README.md)
-[![English](https://img.shields.io/badge/English-a02128?style=for-the-badge)](README.en.md)
+[![中文](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-ece9e7?style=for-the-badge&labelColor=ece9e7&color=8a8785)](README.zh.md)
+[![English](https://img.shields.io/badge/English-a02128?style=for-the-badge)](README.md)
+[![Telegram](https://img.shields.io/badge/Telegram-%40ahao__dev-8a8785?style=for-the-badge&labelColor=a02128&logo=telegram&logoColor=ece9e7)](https://t.me/ahao_dev)
 [![Follow on X](https://img.shields.io/badge/Follow-%40eternityspring-8a8785?style=for-the-badge&labelColor=a02128&logo=x&logoColor=ece9e7)](https://x.com/eternityspring)
+
+🎬 **[AI Video Workspace](https://studio.reelbenchai.com)**
+
+[![ReelBench AI Video Workspace](assets/reelbench-first-screen-en.png)](https://studio.reelbenchai.com)
 
 # reelbench-skills
 
@@ -11,6 +16,12 @@ Claude Code / Codex skills for working with video.
 | [video-shots](skills/video-shots/README.en.md) | **Shot breakdown**: turns a finished film into a shot-by-shot table — duration, shot size, category, camera move, frame description, rhythm role. Cuts and durations are measured by ffmpeg; the model only judges what it should; 15 quality gates check every call. |
 | [video-sync](skills/video-sync/README.en.md) | **Composites a video with the shot data alongside it**: footage on one side, the current shot's data on the other, switching at every cut with the list scrolling and highlighting itself. Landscape stacks, portrait sits side by side; the layout is one CSS file. |
 | [video-scrub](skills/video-scrub/README.en.md) | **Strips metadata**: rebuilds the film as a clean file carrying only picture and sound — GPS, device, account IDs and telemetry tracks all left behind. The hard part is the three layers `ffprobe` cannot see: SEI, the AAC DSE, and compressorname. Byte-for-byte picture by default, verified by 12 byte-level gates. |
+
+## AI video community
+
+I run a paid group about AI video — workflows, tools, and how this stuff actually gets done.
+
+Interested? Message me on Telegram **[@ahao_dev](https://t.me/ahao_dev)** and mention **`github`**.
 
 ## Install
 
