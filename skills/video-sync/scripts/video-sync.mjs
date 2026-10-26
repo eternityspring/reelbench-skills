@@ -492,7 +492,7 @@ function frameCtx(rest, doc) {
  * drawbox 的表达式在初始化时算一次就定死，拿它做动画得到的是一张不动的框（踩过）。
  */
 export function composeArgs({
-  video, still, listDim, listLit, out, layout, motion, view, commands, hasAudio,
+  video, still, listDim, listLit, out, layout, motion, view, commands, hasAudio, duration,
 }) {
   const { width: vw, height: vh } = layout.video;
   const { width: pw, height: ph } = layout.panel;
@@ -522,7 +522,9 @@ export function composeArgs({
     '-map', '[out]',
   ];
   if (hasAudio) args.push('-map', '0:a', '-c:a', 'aac', '-b:a', '160k');
-  args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', String(layout.crf), '-pix_fmt', 'yuv420p',
+  // ffmpeg 8.x 不再用 -shortest 截断 -loop 1 的无限图片输入（会让合成永久挂起），
+  // 必须显式给输出时长，才能正常收尾。
+  args.push('-t', String(duration), '-c:v', 'libx264', '-preset', 'medium', '-crf', String(layout.crf), '-pix_fmt', 'yuv420p',
     '-movflags', '+faststart', '-shortest', out);
   return args;
 }
@@ -612,7 +614,7 @@ function cmdCompose(rest) {
   writeFileSync(cmdFile, `${commandFile(motion.commands)}\n`);
   const args = composeArgs({
     video, still, listDim, listLit, out, layout, motion,
-    view: measure.view, commands: resolve(cmdFile), hasAudio: meta.hasAudio,
+    view: measure.view, commands: resolve(cmdFile), hasAudio: meta.hasAudio, duration: meta.durationSeconds,
   });
 
   execFileSync('ffmpeg', args, { stdio: ['ignore', 'ignore', 'inherit'] });
